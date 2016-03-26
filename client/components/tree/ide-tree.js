@@ -365,33 +365,23 @@
                                         refreshTree();
                                 });
                             }
-                            node=getFileNode(selectedDir);
-                            debugger;
-                            node.getData(node.writer, onend, onprogress, onerror);
-
-                                var content = JSInflate.inflate(node.data);
-                            debugger;
-                            /*node.fs.ZipDirectoryEntry();*/
-                            /*var myFiles = node.fs.entries;
-
-                            for(var i=0; i<myFiles.length; i++) {
-                                var name = myFiles[i].fileName; // This is the file name
-                                var content = JSInflate.inflate(myFiles[i].data); // this is the content of the files within the zip file.
-                            }*/
-                           /* var reader = new FileReader();
-                            reader.readAsBinaryString(filesInput);
-                            reader.onloadend = function(e){
-                                var myZip = e.target.result;
-                                var unzipper = new JSUnzip(myZip);
-
-                                unzipper.readEntries();
-                                var myFiles = unzipper.entries;
-
-                                for(var i=0; i<myFiles.length; i++) {
-                                    var name = myFiles[i].fileName; // This is the file name
-                                    var content = JSInflate.inflate(myFiles[i].data); // this is the content of the files within the zip file.
-                                }
-                            }*/
+                            node = getFileNode(selectedDir);
+                           var k = function(entry, onprogress, onerror) {
+                                entry.getBlob(zip.getMimeType(entry['name']), function(blob) {
+                                    var blobURL = URL.createObjectURL(blob);
+                                    var reader = new FileReader();
+                                    reader.onload = function(event) {
+                                        var contents = event.target.result;
+                                        var editor = ace.edit("editor");
+                                        editor.session.setValue(atob(contents.split(';base64,')[1]))
+                                    };
+                                    reader.onerror = function(event) {
+                                        console.error("File could not be read! Code " + event.target.error.code);
+                                    };
+                                    reader.readAsDataURL(blob);
+                                }, onprogress, onerror);
+                            };
+                            k(node, onprogress, onerror)
                             event.preventDefault();
                         } else if (target.className == "dir-summary") {
                             node = getFileNode(target.parentElement);
