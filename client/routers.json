@@ -1,0 +1,13 @@
+{
+  "coreTemplateUrl": {
+    "login": {"templateUrl":"client/core/templates/login.html"},
+    "register":{"templateUrl": "client/core/templates/register.html"},
+    "forgot_password": {"templateUrl":"client/core/templates/forgot-password.html"},
+    "lockscreen": {"templateUrl":"client/core/templates/lockscreen.html"},
+    "400": {"templateUrl":"client/core/templates/error/page-not-found.html"},
+    "500": {"templateUrl":"client/core/templates/error/internal-server-error.html"}
+  },
+  "appTemplateUrl":{
+    "home": {"templateUrl":"client/enricher-ide/templates/home.html"}
+  }
+}
