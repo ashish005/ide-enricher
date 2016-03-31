@@ -4,7 +4,8 @@
 (function () {
     var appName = 'goLive';
     window['name'] = appName;
-    var app = angular.module(appName, [ 'ngRoute', appName+'.chat', appName+'.codeArea', appName+'.tree']);
+
+    var app = angular.module(appName, [ 'ngRoute', appName+'.chat', appName+'.codeArea', appName+'.tree', appName+'.console']);
     var _rootPath = 'client/';
 
     function config($routeProvider, coreTemplateUrl, appTemplateUrl) {
@@ -58,8 +59,21 @@
 
     function ideController($scope){
         $scope.nodeInfo = function(data){
-            $('#editor').text('');
-            $('#editor').text(data);
+            var editor = ace.edit("editor");
+            editor.session.setValue(data)
+            editor.on("guttermousedown", function(e){
+                var target = e.domEvent.target;
+                if (target.className.indexOf("ace_gutter-cell") == -1)
+                    return;
+                if (!editor.isFocused())
+                    return;
+                if (e.clientX > 25 + target.getBoundingClientRect().left)
+                    return;
+
+                var row = e.getDocumentPosition().row;
+                e.editor.session.setBreakpoint(row);
+                e.stop();
+            });
             //console.log(data);
         }
     };
@@ -72,9 +86,22 @@
                 restrict: 'AE',
                 templateUrl: _rootPath+'core/templates/header.html',
                 link: function (scope, elem) {
+
                     elem.find('#cssmenu ul').on('click', 'li a', function(e){
                         var _case = e.currentTarget.firstChild.getAttribute('case');
-
+                        var _key = e.currentTarget.firstChild.getAttribute('key');
+                        var _ideTEmp = 'client/enricher-ide/';
+                        var menuItems = {
+                          1:{
+                              'new-project':{title: "", draggable: true, content:_ideTEmp + 'file/new-project.html'},
+                              'new':{ title: "", draggable: true, width: "250px", height: "250px", content:_ideTEmp + 'file/new.html'},
+                              'open':{ title: "", draggable: true, width: "500px", height: "480px", content:_ideTEmp + 'file/open.html'},
+                              'open-url':{ title: "", draggable: true, content:_ideTEmp + 'file/open-url.html'},
+                              'save-as':{ title: "", draggable: true, content:_ideTEmp + 'file/save-as.html'},
+                              'reopen-project':{ title: "", draggable: true, content:_ideTEmp + 'file/reopen-project.html'},
+                              'rename-project':{ title: "", draggable: true, content:_ideTEmp + 'file/rename-project.html'}
+                          }
+                        };
                         var _caseEvent = {
                             1:{
                                 exec :openIdeWindow
@@ -83,9 +110,8 @@
                             3:{},
                             4:{}
                         }
-
                         if(_case && _case>0 && _caseEvent[_case] && typeof _caseEvent[_case].exec ==="function"){
-                            _caseEvent[_case].exec();
+                            _caseEvent[_case].exec(_key, menuItems[_case]);
                         }
 
                         /*var menu = $(this).next('ul');
@@ -95,22 +121,50 @@
                             menu.className = 'open';
                         }*/
 
-                        function openIdeWindow(){
-                            $('#ideWindow').ideWindow({
-                                width: "710px",
-                                height: "480px",
-                                title: "",
-                                draggable: true,
-                                position: {
-                                    top: 100,
-                                    left: "20%"
-                                },
-                                content: _rootPath+'enricher-ide/popups/newFolder.html'
-                            });
-
+                        function openIdeWindow(key, info){
+                          $('#ideWindow').ideWindow(info[key]);
                             var dialog = $("#ideWindow").data("ideWindow");
                             dialog.center().open();
                         }
+                    });
+
+                    elem.find('#run_ideCode').on('click', 'a', function(e) {
+                        var worker = new Worker('client/components/ace/build/src/run-ide-editorcode.js');
+                        var editor = ace.edit("editor");
+                        var code = editor.getValue();
+                        // This is basically the previous code block in string form
+
+                        // prepare the string into an executable blob
+                        var bb = new Blob([code], {
+                            type: 'text/javascript'
+                        });
+
+                        // convert the blob into a pseudo URL
+                        var bbURL = URL.createObjectURL(bb);
+
+                        // Prepare the worker to run the code
+                        var worker = new Worker(bbURL);
+
+                        // add a listener for messages from the Worker
+                        worker.addEventListener('message', function(e){
+                            var string = (e.data).toString();
+                            this.$el.find('.console').append('<p>' + string + '</p>');
+                        }.bind(this));
+
+                        // add a listener for errors from the Worker
+                        worker.addEventListener('error', function(e){
+                            var string = (e.message).toString();
+                            that.$el.find('.console').append('<p> ERROR: ' + string + '</p>');
+                        });
+
+                        // Finally, actually start the worker
+                        worker.postMessage('start');
+
+                        // Put a timeout on the worker to automatically kill the worker
+                        setTimeout(function(){
+                            worker.terminate();
+                            worker = null;
+                        }, 10000);
                     });
                 },
                 controller:function($scope){

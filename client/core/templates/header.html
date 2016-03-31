@@ -8,13 +8,13 @@
             <div id='cssmenu'>
                 <ul>
                     <li ng-repeat="items in menuInfo track by $index">
-                        <a ><span case="{{items['case']}}">{{items["text"]}}</span></a>
+                        <a ><span case="{{items['case']}}" key="{{items['key']}}">{{items["text"]}}</span></a>
                         <ul ng-if="items['child'].length>0">
                             <li class='has-sub' ng-repeat="itemChilds in items['child'] track by $index">
-                                <a ><span case="{{itemChilds['case']}}">{{itemChilds["text"]}}</span></a>
+                                <a ><span case="{{itemChilds['case']}}" key="{{itemChilds['key']}}">{{itemChilds["text"]}}</span></a>
                                 <ul ng-if="itemChilds['child'].length>0">
                                     <li class='has-sub' ng-repeat="childs in itemChilds['child'] track by $index">
-                                        <a><span case="{{childs['case']}}">{{childs["text"]}}</span></a>
+                                        <a><span case="{{childs['case']}}" key="{{childs['key']}}">{{childs["text"]}}</span></a>
                                     </li>
                                 </ul>
                             </li>
@@ -66,9 +66,11 @@
                     <span class="m-r-sm text-muted welcome-message"></span>
                 </li>
                 <li>
-                    <a class="right-sidebar-toggle">
-                        <i class="fa fa-play"></i>
-                    </a>
+                    <div id="run_ideCode">
+                        <a class="right-sidebar-toggle">
+                            <i class="fa fa-play"></i>
+                        </a>
+                    </div>
                 </li>
                 <li>
                     <a class="right-sidebar-toggle">

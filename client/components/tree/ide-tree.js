@@ -274,10 +274,10 @@
                                 label.textContent = "<root>";
                             icon.className = "fa fa-folder-o";
                             label.className = "dir-label";
-                            newDirectory.className = "newdir-button button";
+                            newDirectory.className = "newdir-button button fa fa-folder";
                             newDirectory.title = "Create a new folder";
                             newDirectory.addEventListener("click", onnewDirectory, false);
-                            exportDirectory.className = "save-button button";
+                            exportDirectory.className = "save-button button fa fa-save";
                             exportDirectory.title = "Export folder content into a zip file";
                             exportDirectory.addEventListener("click", onexport(false), false);
 
@@ -372,8 +372,9 @@
                                     var reader = new FileReader();
                                     reader.onload = function(event) {
                                         var contents = event.target.result;
-                                        var editor = ace.edit("editor");
-                                        editor.session.setValue(atob(contents.split(';base64,')[1]))
+                                        $scope.sendNodeInfo()(atob(contents.split(';base64,')[1]));
+                                        /*var editor = ace.edit("editor");
+                                        editor.session.setValue(atob(contents.split(';base64,')[1]))*/
                                     };
                                     reader.onerror = function(event) {
                                         console.error("File could not be read! Code " + event.target.error.code);

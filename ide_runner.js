@@ -5,6 +5,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
     http = require('http');
+    livereload = require('livereload');
     //mongoose = require('mongoose');
 
 var  server = express(); // Set up an express server (but not starting it yet)
@@ -31,10 +32,3 @@ server.get('/', function (req, res) {
 server.listen(server.get('port'), function () {
     console.log('INFO: server is running on port ' + server.get('port'));
 });
-
-/*
- app.server.use('/', app.express.static(parentDirectory['server']));
- app.server.get('/', function (req, res) {
- res.sendFile('go-live-client/index.html', { root : __dirname});
- });
- app.server.use('/images', app.express.static(__dirname + '/images'));*/

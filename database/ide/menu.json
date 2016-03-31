@@ -3,37 +3,20 @@
     "id": 1, "text":"File", "order":1,
     "child":
       [
-        { "id": 1, "text":"New Project...", "order":1, "case":1, "child":[]},
-        { "id": 1, "text":"New...", "order":1, "case":1, "child":[]},
-        { "id": 1, "text":"Open...", "order":1, "case":1, "child":[]},
-        { "id": 1, "text":"Open URL...", "order":1, "case":1, "child":[]},
-        { "id": 1, "text":"Save As..", "order":1, "child":[]},
+        { "id": 1, "text":"New Project...", "order":1, "case":1, "key":"new-project", "child":[]},
+        { "id": 1, "text":"New...", "order":1, "case":1, "key":"new", "child":[]},
+        { "id": 1, "text":"Open...", "order":1, "case":1, "key":"open", "child":[]},
+        { "id": 1, "text":"Open URL...", "order":1, "case":1, "key":"open-url", "child":[]},
+        { "id": 1, "text":"Save As..", "order":1, "key":"save-as", "child":[]},
         { 
-          "id": 1, "text":"Reopen Project", "order":1, 
+          "id": 1, "text":"Reopen Project", "order":1, "key":"reopen-project",
           "child":
           [
             { "id": 1, "text":"Clear List", "order":1, "child":[]}
           ]
         },
-        { "id": 1, "text":"Close Project", "order":1, "child":[]},
-        { "id": 1, "text":"Rename Project...", "order":1, "child":[]},
-        { "id": 1, "text":"Settings...", "order":1, "child":[]},
-        { "id": 1, "text":"Default Settings...", "order":1, "child":[]},
-        { "id": 1, "text":"Import Settings...", "order":1, "child":[]},
-        { "id": 1, "text":"Export Settings...", "order":1, "child":[]},
-        { "id": 1, "text":"Save All", "order":1, "child":[]},
-        { "id": 1, "text":"Synchronize", "order":1, "child":[]},
-        { "id": 1, "text":"Invalidate Cache / Restart...", "order":1, "child":[]},
-        { "id": 1, "text":"Export to HTML...", "order":1, "child":[]},
-        { "id": 1, "text":"Print...", "order":1, "child":[]},
-        { "id": 1, "text":"Add to Favorites", "order":1, "child":[]},
-        { "id": 1, "text":"File Encoding", "order":1, "child":[]},
-        { "id": 1, "text":"Line Separators", "order":1, "child":[]},
-        { "id": 1, "text":"Line Separators", "order":1, "child":[]},
-        { "id": 1, "text":"Make File Read-only", "order":1, "child":[]},
-        { "id": 1, "text":"Remove BOM", "order":1, "child":[]},
-        { "id": 1, "text":"Power Save Mode", "order":1, "child":[]},
-        { "id": 1, "text":"Exit", "order":1, "child":[]}
+        { "id": 1, "text":"Close Project", "order":1, "key":"close-project", "child":[]},
+        { "id": 1, "text":"Rename Project...", "order":1, "key":"rename-project", "child":[]}
     ]
   },
   {
